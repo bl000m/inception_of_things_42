@@ -5,7 +5,7 @@
 - Allocate 4 cores.
 - In the settings/system, check the "Allow Nested VM" option.
 
-## Within the Virtuam Machine
+## Within the Virtual Machine
 - Install VirtualBox within the virtual machine. This is a nested VirtualBox installation.
 - Install Vagrant.
 - Install kubectl.

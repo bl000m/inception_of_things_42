@@ -15,9 +15,10 @@
 - Navigate to the Part_1 directory.
 - Run the following command to start the VMs: `vagrant up`
 
-## Once the VMs are created, you can test the connection with the following command (replace ip address):
-`ping ip_address_server`
-You can access the VMs with the following command: 
-`vagrant ssh vm_name`
+## NB 
+- Once the VMs are created, you can test the connection with the following command (replace ip address):
+  - `ping ip_address_server`
+- You can access the VMs with the following command: 
+  - `vagrant ssh vm_name`
 
 Note: The `/vagrant` directory within the VM is shared with the host and if you give a look to the scripts in the Vagrantfile we use the share dir to extract the token from the server node and retrieve it from the worker node.

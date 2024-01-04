@@ -1,22 +1,24 @@
-# on Mac (M1 chip)
-## Install Homebrew (if you haven't already)
-- `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"``
-## Install Rosetta 2 (to run Intel-based packages on M1 Mac)
-- `softwareupdate --install-rosetta`
-## Install QEMU (QEMU is a generic and open-source machine emulator and virtualizer.QEMU is used by Vagrant to run Docker containers as virtual machines)
-- `brew install qemu`
-## Install Vagrant
-- `brew tap hashicorp/tap
-brew install hashicorp/tap/hashicorp-vagrant`
+# Setting Up the Project for Part_1
+This guide will help you set up the project using a virtual machine on VirtualBox. The virtual machine will be stored in /sgoinfre/goinfre/Perso/yourname to avoid exceeding the size limit.
 
-## Vagrantfile
+## Create a Virtual Machine
+- save it in /sgoinfre/goinfre/Perso/yourname to avoid exceeding the size limit
+- Allocate 4 cores.
+- In the settings/system, check the "Allow Nested VM" option.
 
+## Within the Virtuam Machine
+- Install VirtualBox within the virtual machine. This is a nested VirtualBox installation.
+- Install Vagrant.
+- Install kubectl.
 
-## Launch VMs:
-- run docker desktop daemon
+## To work on the project and test
+- Clone the GitHub Repository
+- Navigate to the Part_1 directory.
 - Run the following command to start the VMs: `vagrant up`
-- Access the VMs using SSH:
-```
-vagrant ssh Server
-vagrant ssh ServerWorker
-``````
+
+## Once the VMs are created, you can test the connection with the following command (replace ip address):
+`ping ip_address_server`
+You can access the VMs with the following command: 
+`vagrant ssh vm_name`
+
+Note: The `/vagrant` directory within the VM is shared with the host and if you give a look to the scripts in the Vagrantfile we use the share dir to extract the token from the server node and retrieve it from the worker node.

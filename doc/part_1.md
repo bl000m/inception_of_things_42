@@ -1,5 +1,4 @@
 # Setting Up the Project for Part_1
-This guide will help you set up the project using a virtual machine on VirtualBox. The virtual machine will be stored in /sgoinfre/goinfre/Perso/yourname to avoid exceeding the size limit.
 
 ## Create a Virtual Machine
 - save it in /sgoinfre/goinfre/Perso/yourname to avoid exceeding the size limit

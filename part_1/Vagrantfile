@@ -24,25 +24,26 @@
     
 Vagrant.configure("2") do |config|
   config.vm.box = "bento/ubuntu-22.04"
-  config.vm.define "server" do |server|
-    server.vm.box = "bento/ubuntu-22.04"
+  config.vm.boot_timeout = 120
+  config.vm.define "mpaganiS" do |server|
+    # server.vm.box = "bento/ubuntu-22.04"
     server.vm.hostname = "mpaganiS"
     server.vm.network "private_network", ip: "192.168.56.110"
     server.vm.provider "virtualbox" do |v|
-      v.name = "mpaganiS"
+      # v.name = "mpaganiS"
       v.memory = 512
       v.cpus = 1
     end
     server.vm.provision "shell", inline: <<-SHELL
-      hostnamectl set-hostname mpaganiS
-      echo mpaganiS > /etc/hostname
+      export INSTALL_K3S_EXEC="--write-kubeconfig-mode=644 --tls-san serverS --node-ip 192.168.56.110 --bind-address=192.168.56.110 --advertise-address=192.168.56.110 "
       curl -sfL https://get.k3s.io | sh -
       # Save the K3s token to a file in the same directory as the Vagrantfile
       cat /var/lib/rancher/k3s/server/token > /vagrant/k3s_token
-  SHELL
+      sudo ip link add eth1 type dummy && sudo ip addr add 192.168.56.110/24 dev eth1 && sudo ip link set eth1 u
+    SHELL
   end
-  config.vm.define "server_worker" do |server_worker|
-    server_worker.vm.box = "bento/ubuntu-22.04"
+  config.vm.define "mpaganiSW" do |server_worker|
+    # server_worker.vm.box = "bento/ubuntu-22.04"
     server_worker.vm.hostname = "mpaganiSW"
     server_worker.vm.network "private_network", ip: "192.168.56.111"
     server_worker.vm.provider "virtualbox" do |v|
@@ -51,16 +52,12 @@ Vagrant.configure("2") do |config|
       v.cpus = 1
   end
   # Wait for the server to be created and the token to be saved
-  server_worker.vm.provision "shell", inline: "sleep 10"
-
   server_worker.vm.provision "shell", inline: <<-SHELL
-      hostnamectl set-hostname mpaganiSW
-      echo mpaganiSW > /etc/hostname
-      curl -sfL https://get.k3s.io \
-      | \
-      K3S_URL=https://mpaganiS:6443 K3S_TOKEN=$(cat /vagrant/k3s_token) sh -
-      
-  SHELL
+      export INSTALL_K3S_EXEC="agent --server https://192.168.56.110:6443 -t $(cat /vagrant/k3s_token) --node-ip=192.168.56.111"
+      curl -sfL https://get.k3s.io | sh - \
+      && sudo ip link add eth1 type dummy && sudo ip addr add 192.168.56.111/24 dev eth1 && sudo ip link set eth1 up \
+      && sudo rm /vagrant/k3s_token
+    SHELL
   end
 end
   

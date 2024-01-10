@@ -8,14 +8,14 @@ done
 
 # Set the environment variables for the K3s installation
 # https://docs.k3s.io/installation/configuration#configuration-file
-export K3S_URL="https://192.168.56.110:6443"
-export K3S_TOKEN=$(cat /vagrant/token.env)
-
-# Install kubectl
-sudo apt-get update && sudo snap install kubectl --classic
+export TOKEN_FILE="/vagrant/token.env"
+export INSTALL_K3S_EXEC="agent --server https://192.168.56.110:6443 --token-file $TOKEN_FILE --node-ip=192.168.56.111"
 
 # Install worker node
 curl -sfL https://get.k3s.io | sh -
+
+# Install kubectl
+sudo apt-get update && sudo snap install kubectl --classic
 
 # Label the worker node as a worker
 # kubectl label nodes $(hostname) node-role.kubernetes.io/worker=

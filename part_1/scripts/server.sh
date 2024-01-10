@@ -17,4 +17,6 @@ sudo cat /var/lib/rancher/k3s/server/token >> /vagrant/token.env
 # Create a virtual network interface named eth1
 # Assign the IP address 192.168.56.110 with a subnet mask of /24 to eth1
 # Activate the eth1 interface
-sudo ip link add eth1 type dummy && sudo ip addr add 192.168.56.110/24 dev eth1 && sudo ip link set eth1 up
+# sudo ip link add eth1 type dummy && sudo ip addr add 192.168.56.110/24 dev eth1 && sudo ip link set eth1 up
+# Assign the IP address 192.168.56.110 with a subnet mask of /56 to eth1
+sudo ip link add eth1 type dummy && sudo ip addr add fdc0::1/56 dev eth1 && sudo ip link set eth1 up

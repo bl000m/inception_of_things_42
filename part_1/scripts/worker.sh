@@ -6,6 +6,7 @@ while [ ! -f /vagrant/token.env ]; do
  sleep 1
 done
 
+
 # Set the environment variables for the K3s installation
 # https://docs.k3s.io/installation/configuration#configuration-file
 export TOKEN_FILE="/vagrant/token.env"

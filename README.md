@@ -77,8 +77,8 @@
 - `vagrant resume`: Resumes a previously suspended Vagrant environment.
 
 ## Useful Kubectl cmds
-- `kubectl get nodes` -> to list the nodes in the cluster (alias `franknodes``)
-- `kubectl get pods` _> to list the pods in the current namespace (alias `frankpods``)
+- `kubectl get nodes` -> to list the nodes in the cluster (alias `franknodes`)
+- `kubectl get pods` _> to list the pods in the current namespace (alias `frankpods`)
 - `kubectl get pods -A` (or `kubectl get pods --all-namespaces`) -> to list the pods in all the namespaces (alias: `frankallpods`)
 
 **NB**: when executing `kubectl get pods -A` after having created the kubernetes cluster, we can see all the system pods created by default. 

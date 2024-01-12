@@ -99,6 +99,10 @@
  
 ## Manifest items:
 
+- In this Kubernetes manifest we define 3 services (app1, app2, app3) of type BodePort
+Each service exposes port 80 on the host and directs traffic to port 8080 on the selected pods with corresponding labels (app-1, app-2, and app-3).
+
+
 - apiVersion: Specifies the API version of the Kubernetes resource. In our case, it's v1, which is the core/v1 API version.
 
 - kind: Indicates the type of Kubernetes resource. Here, it's a Service, which represents a service that exposes applications within a cluster.
@@ -130,4 +134,10 @@
 
 - **Security Considerations**: The internal port (8080) might be chosen based on the application's default port or security policies. It's a common practice to run applications inside containers with non-privileged users, and ports below 1024 are typically reserved for privileged processes. By defaulting to a higher port for the internal application, you avoid potential conflicts and security concerns.
 
+## Ingress
+- Important: Add entries in `/etc/hosts` for the hostnames specified in Ingress manifest, mapping them to the IP address of Kubernetes cluster node. 
+
+192.168.56.110 app1.com
+192.168.56.110 app2.com
+192.168.56.110 app3.com
 

@@ -43,9 +43,8 @@
 - In the settings/system, check the "Allow Nested VM" option.
 
 ## Within the Virtual Machine
-- Install VirtualBox within the virtual machine. This is a nested VirtualBox installation.
+- Install VirtualBox within the virtual machine => nested VirtualBox installation.
 - Install Vagrant.
-- Install kubectl.
 
 ## To work on the project and test
 - Clone the GitHub Repository
@@ -63,7 +62,7 @@
 ## Cluster
 - we have installed kubectl in both the scripts to list nodes and test cluster on server machine (mpaganiS). Now we need to list nodes to check everything is good: 
 
-- `kubectl get nodes` => to list all nodes in the cluster
+- `kubectl get nodes` (or the alias `frankpods`) => to list all nodes in the cluster
 
 **Note**: The `/vagrant` directory within the VM is shared with the host and if you give a look to the scripts in the Vagrantfile we use the share dir to extract the token from the server node and retrieve it from the worker node.
 

@@ -67,27 +67,28 @@
 **Note**: The `/vagrant` directory within the VM is shared with the host and if you give a look to the scripts in the Vagrantfile we use the share dir to extract the token from the server node and retrieve it from the worker node.
 
 ## Useful Vagrant cmds
-- vagrant up: Starts and provisions the Vagrant environment.
-- vagrant global-status: Displays the status of all Vagrant environments on the machine.
-- vagrant destroy: Stops and deletes the running Vagrant environment.
-- vagrant reload: Restarts the Vagrant environment, applying any configuration changes.
-- vagrant ssh: SSH into the running Vagrant machine.
-- vagrant halt: Stops the Vagrant environment without destroying it.
-- vagrant suspend: Suspends the Vagrant environment, saving its current state.
-- vagrant resume: Resumes a previously suspended Vagrant environment.
+- `vagrant up`: Starts and provisions the Vagrant environment.
+- `vagrant global-status`: Displays the status of all Vagrant environments on the machine.
+- `vagrant destroy`: Stops and deletes the running Vagrant environment.
+- `vagrant reload`: Restarts the Vagrant environment, applying any configuration changes.
+- `vagrant ssh`: SSH into the running Vagrant machine.
+- `vagrant halt`: Stops the Vagrant environment without destroying it.
+- `vagrant suspend`: Suspends the Vagrant environment, saving its current state.
+- `vagrant resume`: Resumes a previously suspended Vagrant environment.
 
 ## Useful Kubectl cmds
-- kubectl get nodes -> to list the nodes in the cluster (alias `franknodes``)
-- kubectl get pods _> to list the pods in the current namespace (alias `frankpods``)
-- kubectl get pods -A (or kubectl get pods --all-namespaces) -> to list the pods in all the namespaces (alias: `frankallpods`)
+- `kubectl get nodes` -> to list the nodes in the cluster (alias `franknodes``)
+- `kubectl get pods` _> to list the pods in the current namespace (alias `frankpods``)
+- `kubectl get pods -A` (or `kubectl get pods --all-namespaces`) -> to list the pods in all the namespaces (alias: `frankallpods`)
 
-NB: when executing `kubectl get pods -A` after having created the kubernetes cluster, we can see all the system pods created by default. Why ? Here is the answer:
+**NB**: when executing `kubectl get pods -A` after having created the kubernetes cluster, we can see all the system pods created by default. 
+**Why ? Here is the answer**:
 - When you create a Kubernetes cluster, certain system components are automatically deployed to facilitate the operation of the cluster. These components are known as system pods. They are responsible for various functions such as DNS resolution (`coredns`), storage provisioning (`local-path-provisioner`), and monitoring (`metrics-server`) among others. These system pods are created in the `kube-system`` namespace by default.
 
 - The `helm-install-traefik-crd-pndrc` and `helm-install-traefik-7xbqm` pods are part of `Helm`, a package manager for Kubernetes. Helm charts are packages of pre-configured Kubernetes resources. When you install a Helm chart, Helm uses a temporary job to create, update, or delete resources.
 
 ## Troubleshooting
 - to check status cluster agent within the worker node: `systemctl status k3s-agent`
-- to check k3s agent logs within the nodes: cat /var/logs/k3s-agent.logs
-- to check if a node can reach another one (for example the worker and server): ping server_ip
+- to check k3s agent logs within the nodes: `cat /var/logs/k3s-agent.logs`
+- to check if a node can reach another one (for example the worker and server): `ping server_ip`
 

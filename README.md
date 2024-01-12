@@ -31,7 +31,7 @@ NB: a node can contain multiple namespaces, each containing multiple pods
 - Namespace: Namespace is a way to divide cluster resources between multiple users or teams. It provides a scope for names and can be used to group together objects that are logically associated. Namespaces are a fundamental aspect of Kubernetes and can be used to manage, partition, and isolate resources in a large cluster.
 
 
-# Setting Up the Project for Part_1
+# PART 1: Setting Up the Project
 
 ## Create a Virtual Machine
 - save it in /sgoinfre/goinfre/Perso/yourname to avoid exceeding the size limit

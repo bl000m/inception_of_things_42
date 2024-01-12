@@ -38,9 +38,9 @@
 # PART 1: Setting Up the Project
 
 ## Create a Virtual Machine
-- save it in /sgoinfre/goinfre/Perso/yourname to avoid exceeding the size limit
+- save it in `/sgoinfre/goinfre/Perso/yourname` to avoid exceeding the size limit
 - Allocate 4 cores.
-- In the settings/system, check the "Allow Nested VM" option.
+- In **settings > system**, check the "Allow Nested VM" option.
 
 ## Within the Virtual Machine
 - Install VirtualBox within the virtual machine => nested VirtualBox installation.
@@ -48,8 +48,8 @@
 
 ## To work on the project and test
 - Clone the GitHub Repository
-- Navigate to the Part_1 directory.
-- be sure that scripts in /scripts dir have right permissions, otherwise `chmod +x` the two of them
+- Navigate to the `part_1` directory.
+- be sure that scripts in `/scripts` dir have right permissions, otherwise `chmod +x` the two of them
 - K3s requires swap to be disabled, as it can interfere with the functioning of containers. We need to disable swap on Ubuntu with the command `sudo swapoff -a` (to bring it on back again for testing: `sudo swapon --all`).
 - Run the following command to start the VMs: `vagrant up`
 

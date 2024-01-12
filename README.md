@@ -46,11 +46,11 @@ NB: a node can contain multiple namespaces, each containing multiple pods
 ## To work on the project and test
 - Clone the GitHub Repository
 - Navigate to the Part_1 directory.
-- be sure that scripts in /scrips dir have right permissions, otherwise `chmod +x` the two of them
+- be sure that scripts in /scripts dir have right permissions, otherwise `chmod +x` the two of them
 - K3s requires swap to be disabled, as it can interfere with the functioning of containers. We need to disable swap on Ubuntu with the command `sudo swapoff -a` (to bring it on back again for testing: `sudo swapon --all`).
 - Run the following command to start the VMs: `vagrant up`
 
-## TEST 
+## Test
 - Once the VMs are created, you can test the connection with the following command (replace ip address):
   - `ping ip_address_server`
 - You can access the VMs with the following command: 

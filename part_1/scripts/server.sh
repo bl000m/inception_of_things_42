@@ -23,5 +23,8 @@ sudo cp /var/lib/rancher/k3s/server/node-token /vagrant/scripts/
 
 echo "[WE DID IT FRANK !]  Successfully installed k3s on server node"
 
-echo "alias k='kubectl'" >> /etc/profile.d/00-aliases.sh
+echo "alias frank='kubectl'" >> /etc/profile.d/00-aliases.sh
+echo "alias franknodes='kubectl get nodes'" >> /etc/profile.d/00-aliases.sh
+echo "alias frankpods='kubectl get pods'" >> /etc/profile.d/00-aliases.sh
+echo "alias frankallpods='kubectl get pods --all-namespaces'" >> /etc/profile.d/00-aliases.sh
 

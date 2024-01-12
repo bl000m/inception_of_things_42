@@ -1,0 +1,30 @@
+SERVER_IP = "192.168.56.110"
+
+SERVER_HOSTNAME = "mpaganiS"
+
+IMAGE = "generic/alpine311"
+
+MEMORY = "2048"
+CPUS = 2 
+
+Vagrant.configure("2") do |config|
+    config.vm.box = IMAGE
+    config.vm.provider "virtualbox" do |vb|
+      vb.memory = MEMORY
+      vb.cpus = CPUS
+    end
+   
+    machines = {
+      "mpaganiS" => { hostname: SERVER_HOSTNAME, ip: SERVER_IP, script: "scripts/server.sh", args: [SERVER_IP] },
+    }
+
+    machines.each do |name, details|
+      config.vm.define name do |machine|
+        machine.vm.hostname = details[:hostname]
+        machine.vm.synced_folder ".", "/vagrant"
+        machine.vm.network "private_network", ip: details[:ip]
+        machine.vm.provision "shell", privileged: true, path: details[:script], args: details[:args]
+      end
+    end
+   end
+   

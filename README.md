@@ -21,6 +21,8 @@
 - Create a namespace named 'gitlab'.
 - Ensure that all aspects of Part 3 work with the local Gitlab instance.
 <br><br>
+---
+<br><br>
 # Key Concepts in Kubernetes
 
 - *Node*: In Kubernetes, a Node is essentially a worker machine in a cluster. It could be either a virtual or a physical machine, depending on the environment. Each node is managed by the master components and runs containerized applications. The node could be a part of a multi-node cluster where the master components are distributed across multiple nodes for high availability.
@@ -31,7 +33,8 @@ NB: a node can contain multiple namespaces, each containing multiple pods
 
 - *Namespace*: Namespace is a way to divide cluster resources between multiple users or teams. It provides a scope for names and can be used to group together objects that are logically associated. Namespaces are a fundamental aspect of Kubernetes and can be used to manage, partition, and isolate resources in a large cluster.
 <br><br>
-  
+---  
+<br><br>
 # PART 1: Setting Up the Project
 
 ## Create a Virtual Machine

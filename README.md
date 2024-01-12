@@ -56,7 +56,7 @@ NB: a node can contain multiple namespaces, each containing multiple pods
 - You can access the VMs with the following command: 
   - `vagrant ssh vm_name`
 
-## CLUSTER
+## Cluster
 - we have installed kubectl in both the scripts to list nodes and test cluster on server machine (mpaganiS). Now we need to list nodes to check everything is good: 
 
 - `kubectl get nodes` => to list all nodes in the cluster
@@ -64,7 +64,7 @@ NB: a node can contain multiple namespaces, each containing multiple pods
 
 Note: The `/vagrant` directory within the VM is shared with the host and if you give a look to the scripts in the Vagrantfile we use the share dir to extract the token from the server node and retrieve it from the worker node.
 
-## useful Vagrant cmds
+## Useful Vagrant cmds
 - vagrant up: Starts and provisions the Vagrant environment.
 - vagrant global-status: Displays the status of all Vagrant environments on the machine.
 - vagrant destroy: Stops and deletes the running Vagrant environment.
@@ -74,7 +74,7 @@ Note: The `/vagrant` directory within the VM is shared with the host and if you 
 - vagrant suspend: Suspends the Vagrant environment, saving its current state.
 - vagrant resume: Resumes a previously suspended Vagrant environment.
 
-## useful Kubectl cmds
+## Useful Kubectl cmds
 - kubectl get nodes -> to list the nodes in the cluster (alias `franknodes``)
 - kubectl get pods _> to list the pods in the current namespace (alias `frankpods``)
 - kubectl get pods -A (or kubectl get pods --all-namespaces) -> to list the pods in all the namespaces (alias: `frankallpods`)

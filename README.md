@@ -1,36 +1,36 @@
-# Part 1: K3s and Vagrant
+# The project
+## Part 1: K3s and Vagrant
 - Set up 2 virtual machines using Vagrant, with specific resource constraints.
 - Assign dedicated IPs to each machine.
 - Configure SSH access without a password.
 - Install K3s on both machines, with the first one in controller mode and the second one in agent mode.
-# Part 2: K3s and Three Simple Applications
+## Part 2: K3s and Three Simple Applications
 - Set up a virtual machine with the latest stable distribution and K3s in server mode.
 - Deploy three web applications using K3s.
 - Configure Ingress to route traffic based on the HOST parameter, displaying different apps.
 - Include replicas for the second application.
-# Part 3: K3d and Argo CD
+## Part 3: K3d and Argo CD
 - Install K3D on the virtual machine.
 - Create two namespaces: one for Argo CD and another named 'dev'.
 - Deploy an application in the 'dev' namespace, automatically deployed by Argo CD from a public GitHub repository.
 - The application must have two versions, and changes in the GitHub repository should trigger updates.
-# Bonus Part: Gitlab Integration
+## Bonus Part: Gitlab Integration
 - Integrate Gitlab into the infrastructure created in Part 3.
 - Install the latest version of Gitlab locally.
 - Configure Gitlab to work with the Kubernetes cluster.
 - Create a namespace named 'gitlab'.
-- Ensure that all aspects of Part 3 work with the local Gitlab instance.
-
+- Ensure that all aspects of Part 3 work with the local Gitlab instance.  
+  
 # Key Concepts in Kubernetes
 
-- Node: In Kubernetes, a Node is essentially a worker machine in a cluster. It could be either a virtual or a physical machine, depending on the environment. Each node is managed by the master components and runs containerized applications. The node could be a part of a multi-node cluster where the master components are distributed across multiple nodes for high availability.
+- *Node*: In Kubernetes, a Node is essentially a worker machine in a cluster. It could be either a virtual or a physical machine, depending on the environment. Each node is managed by the master components and runs containerized applications. The node could be a part of a multi-node cluster where the master components are distributed across multiple nodes for high availability.
 
 NB: a node can contain multiple namespaces, each containing multiple pods
 
-- Pod: A Pod is the smallest and simplest unit in the Kubernetes object model. It represents a single instance of a running process in a cluster and can contain one or more containers. These containers within a pod share storage and network resources, and can communicate with each other using localhost. Pods can be scheduled on any node in the cluster, and they are ephemeral and can be terminated and replaced.
+- *Pod*: A Pod is the smallest and simplest unit in the Kubernetes object model. It represents a single instance of a running process in a cluster and can contain one or more containers. These containers within a pod share storage and network resources, and can communicate with each other using localhost. Pods can be scheduled on any node in the cluster, and they are ephemeral and can be terminated and replaced.
 
-- Namespace: Namespace is a way to divide cluster resources between multiple users or teams. It provides a scope for names and can be used to group together objects that are logically associated. Namespaces are a fundamental aspect of Kubernetes and can be used to manage, partition, and isolate resources in a large cluster.
-
-
+- *Namespace*: Namespace is a way to divide cluster resources between multiple users or teams. It provides a scope for names and can be used to group together objects that are logically associated. Namespaces are a fundamental aspect of Kubernetes and can be used to manage, partition, and isolate resources in a large cluster.  
+  
 # PART 1: Setting Up the Project
 
 ## Create a Virtual Machine

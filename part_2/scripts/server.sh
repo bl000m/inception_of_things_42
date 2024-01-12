@@ -28,15 +28,15 @@ echo "alias franknodes='kubectl get nodes'" >> /etc/profile.d/00-aliases.sh
 echo "alias frankpods='kubectl get pods'" >> /etc/profile.d/00-aliases.sh
 echo "alias frankallpods='kubectl get pods --all-namespaces'" >> /etc/profile.d/00-aliases.sh
 
-declare -a conf_files=(
-  "/vagrant/scripts/manifest.yml"
-  "/vagrant/scripts/app_1.yml"
-  "/vagrant/scripts/app_2.yml"
-  "/vagrant/scripts/app_3.yml"
-  "/vagrant/scripts/ingress.yml"
+declare -a manifests=(
+  "/vagrant/manifests/manifest.yml"
+  "/vagrant/manifests/app1.yml"
+  "/vagrant/manifests/app2.yml"
+  "/vagrant/manifests/app3.yml"
+  "/vagrant/manifests/ingress.yml"
 )
 
-for conf_file in "${conf_files[@]}"; do
-  kubectl apply -f "$conf_file" --wait
+for manifest in "${manifests[@]}"; do
+  kubectl apply -f "$manifest" --wait
 done
 

@@ -16,4 +16,8 @@ fi
 
 curl -sfL https://get.k3s.io | sh -
 
-echo "alias k='kubectl'" >> /etc/profile.d/00-aliases.sh
+echo "[WE DID IT FRANK !]  Successfully installed k3s on worker node"
+
+echo "alias frank='kubectl'" >> /etc/profile.d/00-aliases.sh
+
+

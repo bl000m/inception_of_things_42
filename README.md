@@ -92,7 +92,10 @@
 - to check k3s agent logs within the nodes: `cat /var/logs/k3s-agent.logs`
 - to check if a node can reach another one (for example the worker and server): `ping server_ip`
 
-# Part 2
+<br><br>
+---  
+<br><br>
+# Part 2: deploying 3 services in the cluster
  
 ## Manifest items:
 

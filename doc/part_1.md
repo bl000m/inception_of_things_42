@@ -1,4 +1,4 @@
-# Setting Up the Project for Part_1
+# PART 1: Setting Up the Project
 
 ## Create a Virtual Machine
 - save it in /sgoinfre/goinfre/Perso/yourname to avoid exceeding the size limit

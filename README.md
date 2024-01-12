@@ -19,8 +19,10 @@
 - Install the latest version of Gitlab locally.
 - Configure Gitlab to work with the Kubernetes cluster.
 - Create a namespace named 'gitlab'.
-- Ensure that all aspects of Part 3 work with the local Gitlab instance.  
+- Ensure that all aspects of Part 3 work with the local Gitlab instance.
   
+
+
 # Key Concepts in Kubernetes
 
 - *Node*: In Kubernetes, a Node is essentially a worker machine in a cluster. It could be either a virtual or a physical machine, depending on the environment. Each node is managed by the master components and runs containerized applications. The node could be a part of a multi-node cluster where the master components are distributed across multiple nodes for high availability.

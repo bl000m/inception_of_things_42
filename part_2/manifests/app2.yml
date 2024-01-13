@@ -5,7 +5,7 @@ metadata:
   labels:
     app: app2
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: app2
@@ -20,4 +20,4 @@ spec:
         imagePullPolicy: IfNotPresent
         env:
         - name: MESSAGE
-          value: "Hello Frank I'm app 2!."
+          value: "Hello Frank I'm app 2 (let's say ... one of the three replicas)!."

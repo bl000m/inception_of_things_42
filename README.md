@@ -78,8 +78,9 @@
 
 ## Useful Kubectl cmds
 - `kubectl get nodes` -> to list the nodes in the cluster (alias `franknodes`)
-- `kubectl get pods` _> to list the pods in the current namespace (alias `frankpods`)
+- `kubectl get pods` -> to list the pods in the current namespace (alias `frankpods`)
 - `kubectl get pods -A` (or `kubectl get pods --all-namespaces`) -> to list the pods in all the namespaces (alias: `frankallpods`)
+- `kubectl get all` -> list all (pods, services, deployment, replicas)
 
 **NB**: when executing `kubectl get pods -A` after having created the kubernetes cluster, we can see all the system pods created by default. 
 **Why ? Here is the answer**:
@@ -135,9 +136,18 @@ Each service exposes port 80 on the host and directs traffic to port 8080 on the
 - **Security Considerations**: The internal port (8080) might be chosen based on the application's default port or security policies. It's a common practice to run applications inside containers with non-privileged users, and ports below 1024 are typically reserved for privileged processes. By defaulting to a higher port for the internal application, you avoid potential conflicts and security concerns.
 
 ## Ingress
-- Important: Add entries in `/etc/hosts` for the hostnames specified in Ingress manifest, mapping them to the IP address of Kubernetes cluster node. 
+- Important: Add entries in `/etc/hosts` within BOTH the server node (this is done by the server.sh script) and the host (this has to be done manually) for the hostnames specified in Ingress manifest, mapping them to the IP address of Kubernetes cluster node => mandatory the mapping btw the 2 /etc/hosts (host and server node) 
 
 192.168.56.110 app1.com
 192.168.56.110 app2.com
 192.168.56.110 app3.com
 
+## Testing
+- `kubectl get all` to list all pods, services and replicas
+- `curl -H "Host:app2.com" 192.168.56.110` to check that app2 (or 1 or 3) is well reacheble
+
+## Debugging
+- `kubectl logs -n kube-system traefik-f4564c4f4-msskz` Traefik Ingress Controller is in kubesystem namespace (check with `get pods -A` and replace the name) 
+- `kubectl describe ingress ingress` => Check the status of your Ingress resource
+- check services endpoint: `kubectl describe services app1 app2 app3`
+- access the Ingress controller pods: `kubectl exec -it -n kube-system traefik-f4564c4f4-d7cfm -- sh`

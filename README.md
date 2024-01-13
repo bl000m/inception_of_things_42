@@ -151,3 +151,13 @@ Each service exposes port 80 on the host and directs traffic to port 8080 on the
 - `kubectl describe ingress ingress` => Check the status of your Ingress resource
 - check services endpoint: `kubectl describe services app1 app2 app3`
 - access the Ingress controller pods: `kubectl exec -it -n kube-system traefik-f4564c4f4-d7cfm -- sh`
+<br><br>
+---  
+<br><br>
+
+# Part 4
+
+## Conf on the host (the nested VM)
+- install Docker : https://docs.docker.com/engine/install/ubuntu/ 
+- install K3D: `wget -q -O - https://raw.githubusercontent.com/rancher/k3d/main/install.sh | bash`
+- install kubectl:  `sudo snap install kubectl --classic`

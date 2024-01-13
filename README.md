@@ -155,9 +155,26 @@ Each service exposes port 80 on the host and directs traffic to port 8080 on the
 ---  
 <br><br>
 
-# Part 4
+# Part 3
 
-## Conf on the host (the nested VM)
+## Conf on the host (the nested VM) via script /kick_off
 - install Docker : https://docs.docker.com/engine/install/ubuntu/ 
 - install K3D: `wget -q -O - https://raw.githubusercontent.com/rancher/k3d/main/install.sh | bash`
 - install kubectl:  `sudo snap install kubectl --classic`
+
+## Testing
+Execute the script in this order:
+- `setting/install_dependencies.sh`
+- `k3d/k3d_cluster_setup`
+- `argo_cd_conf.sh`
+=> the logs will tell us at which ip address to access Argo on browser
+To check:
+- `docker ps`
+- `k3d node list`
+- `k3d cluster get frank-cluster`
+- `k3d cluster list`
+- `kubectl cluster info`
+
+## troubleshooting
+- `k3d cluster delete frank-cluster`
+- `kubectl delete namespace dev`

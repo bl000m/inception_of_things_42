@@ -28,6 +28,14 @@ echo "alias franknodes='kubectl get nodes'" >> /etc/profile.d/00-aliases.sh
 echo "alias frankpods='kubectl get pods'" >> /etc/profile.d/00-aliases.sh
 echo "alias frankallpods='kubectl get pods --all-namespaces'" >> /etc/profile.d/00-aliases.sh
 
+# Add IP address and DNS resolution to /etc/hosts within the server node
+echo "192.168.56.110 app1.com" | sudo tee -a /etc/hosts
+echo "192.168.56.110 app2.com" | sudo tee -a /etc/hosts
+echo "192.168.56.110 app3.com" | sudo tee -a /etc/hosts
+
+sleep 10
+echo "[TAKING SOME REST FRANK ...] 10 seconds"
+
 kubectl apply -f "/vagrant/manifests/manifest.yml"
 sleep 2
 kubectl apply -f "/vagrant/manifests/app1.yml"

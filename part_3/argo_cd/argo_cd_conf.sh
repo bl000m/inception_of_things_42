@@ -34,8 +34,23 @@ sudo curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/release
 sudo install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
 sudo rm argocd-linux-amd64
 
-while [[ $(kubectl get pods -n argocd -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True True True True True True True" ]]; \
- do echo "[INFO][ARGOCD] Waiting all pods to be ready..." && sleep 10; done
+
+wait_for_argocd_pods() {
+    desired_ready_count=$(kubectl get pods -n argocd --no-headers=true | awk '/Running/ && /1\/1/ {++count} END {print count}')
+    total_pods=$(kubectl get pods -n argocd --no-headers=true | wc -l)
+
+    while [[ "$desired_ready_count" -ne "$total_pods" ]]; do
+        echo "[INFO][ARGOCD] Waiting for all pods to be ready..."
+        sleep 10
+
+        desired_ready_count=$(kubectl get pods -n argocd --no-headers=true | awk '/Running/ && /1\/1/ {++count} END {print count}')
+        total_pods=$(kubectl get pods -n argocd --no-headers=true | wc -l)
+    done
+}
+
+wait_for_argocd_pods
+# while [[ $(kubectl get pods -n argocd -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True True True True True True True" ]]; \
+#  do echo "[INFO][ARGOCD] Waiting all pods to be ready..." && sleep 10; done
 
 # port forwarding
 
@@ -45,7 +60,9 @@ if sudo netstat -tulpn | grep -q :8080; then
     
      # Find and kill the process using port 8080
     # sudo lsof -i :8080 -sTCP:LISTEN -t | xargs sudo kill -9
-    kill $(ps | grep -v 'grep' | grep 'kubectl port-forward svc/argocd-server' | cut -d ' ' -f1) 2>/dev/null
+    # kill $(ps | grep -v 'grep' | grep 'kubectl port-forward svc/argocd-server' | cut -d ' ' -f1) 2>/dev/null
+    # Find and kill the process using port 8080
+    sudo pkill -f 'kubectl port-forward svc/argocd-server'
 
     
     # Wait for a short duration to allow the process to terminate
@@ -53,6 +70,7 @@ if sudo netstat -tulpn | grep -q :8080; then
     
     echo "Process killed."
 fi
+
 
 # start port forwarding
 echo "Starting port forwarding..."
@@ -62,23 +80,27 @@ sleep 10
 echo "Port forwarding started successfully. Below the detail of port forwarding:"
 sudo netstat -tulpn | grep :8080
 
+# Check if another port-forwarding process is already in progress
+while sudo lsof -i :8080 -sTCP:LISTEN -t | grep -q 'kubectl'; do
+    echo "Waiting for existing port-forwarding process to complete..."
+    sleep 5
+done
 
-# Debugging
-echo "Before ArgoCD login"
+# Wait for port-forwarding to be ready
+while ! curl -s http://localhost:8080 > /dev/null; do
+    echo "Waiting for port-forwarding to be ready..."
+    sleep 5
+done
 
 # Log in to ArgoCD using admin credentials
 ARGOCD_PASSWORD=$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)
 
-# Debugging
-echo "ARGOCD_PASSWORD: $ARGOCD_PASSWORD"
+echo -e "ARGOCD_PASSWORD: \033[0;32m$ARGOCD_PASSWORD\033[0m"
 
 sleep 2
 
 # Login command
 argocd login localhost:8080 --username admin --password "$ARGOCD_PASSWORD" --insecure
-
-# Debugging
-echo "After ArgoCD login"
 
 # Create ArgoCD application
 # argocd app create will --repo 'https://github.com/bl000m/mpagani.git' --path 'app' --dest-namespace 'dev' --dest-server 'https://kubernetes.default.svc' --grpc-web
@@ -101,7 +123,6 @@ if [ $? -eq 20 ]; then
 fi
 
 # Display information about the created app before sync
-echo "\033[0;36mView created app before sync and configuration\033[0m"
 argocd app get will --grpc-web
 
 # Set up sync policies for the application
@@ -109,15 +130,27 @@ argocd app set will --sync-policy automated --grpc-web
 argocd app set will --auto-prune --allow-empty --grpc-web
 
 # Display information about the created app after sync and configuration
-echo "\033[0;36mView created app after sync and configuration\033[0m"
-sleep 5
+# echo "\033[0;36mView created app after sync and configuration\033[0m"
+# sleep 1
+# echo "making your app healthier..."
+# for i in 1 2 3 4 5 6 7 8 9
+# do
+#     sleep 1
+#     echo "and healthier..."
+# done
+
+
+while true; do
+    output=$(argocd app get will --grpc-web)
+
+    # Check if both service and deployment are healthy in the output
+    if [[ $output == *"Service"*"Healthy"* && $output == *"Deployment"*"Healthy"* ]]; then
+        echo "Yes Frank! Both service and deployment are healthy_"
+        break 
+    else
+        echo "Waiting for the app to become healthier..."
+        sleep 1
+    fi
+done
+
 argocd app get will --grpc-web
-
-# Wait for user input before exiting
-read -p "Press Enter to stop port forwarding and exit..."
-
-# Run verification script
-# ./verify.sh 'called_from_launch' $1
-
-# Exit
-exit 0

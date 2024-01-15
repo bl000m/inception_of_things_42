@@ -72,6 +72,8 @@ ARGOCD_PASSWORD=$(kubectl -n argocd get secret argocd-initial-admin-secret -o js
 # Debugging
 echo "ARGOCD_PASSWORD: $ARGOCD_PASSWORD"
 
+sleep 2
+
 # Login command
 argocd login localhost:8080 --username admin --password "$ARGOCD_PASSWORD" --insecure
 
@@ -108,6 +110,7 @@ argocd app set will --auto-prune --allow-empty --grpc-web
 
 # Display information about the created app after sync and configuration
 echo "\033[0;36mView created app after sync and configuration\033[0m"
+sleep 5
 argocd app get will --grpc-web
 
 # Wait for user input before exiting

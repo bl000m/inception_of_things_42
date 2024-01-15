@@ -189,6 +189,7 @@ Useful commands to check:
 - `kubectl cluster info`
 - `argocd app list dev`
 - `kubectl get svc argocd-server -n argocd`
+- `kubectl get namespaces`
 What to test:
 - list the pod running in dev namespace: `kubectl get pods -n dev`
 - we should see the only pod running corresponding to the Wil app installed, copy its pod name
@@ -215,8 +216,23 @@ in the Image we have **v1**
 - it takes some minute for the system to delete the pod corresponding to v1 and replace it with the pod corresponding to v2
 - to check it forward the port for Will app with this command : `kubectl port-forward svc/will-app-service -n dev 8888:8888`
 - this way we can access localhost:8888 on browser. When the switch of version has been done we should see `{"status":"ok", "message": "v2"}`
+- or in an easier way: `curl http://localhost:8888`
 - iw we rerun `kubectl get pods -n dev` and `kubectl describe pod <pod_name> -n dev` right after we should see now see **v2** in the Image section
 
 ## troubleshooting
 - `k3d cluster delete frank-cluster`
 - `kubectl delete namespace dev`
+
+# Bonus
+- we create an independent instance of GitLab that runs within our cluster. 
+This is separate from the GitLab service hosted at gitlab.com.
+
+- The GitLab instance deployed in our cluster is a self-hosted version
+- we have this way full control over the environment, configurations, and data. 
+
+- our self-hosted instance  and the GitLab service at gitlab.com are distinct, and they don't share the same data or user accounts. Users and projects created in one instance won't be automatically accessible in the other.
+
+## Steps involved in deploying GitLab into a Kubernetes cluster
+- Installation of GitLab Helm Chart: Helm is a package manager for Kubernetes applications. we use the GitLab Helm chart to define and install the necessary components for GitLab. The Helm chart provides a set of predefined configurations and resources needed to run GitLab in a Kubernetes environment.
+- These settings include the domain, external IP, whether to use HTTPS, and a timeout duration for the deployment.
+- Port forwarding: set up port forwarding to allow access to GitLab. by forwarding traffic from the local machine's port 80 to the GitLab service in the Kubernetes cluster.

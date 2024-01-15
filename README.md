@@ -1,3 +1,35 @@
+# Kubernetes architecture
+![image](https://github.com/bl000m/inception_of_things_42/assets/84441663/694be788-79fc-42c3-acce-2a0ffced91de)
+
+## Cluster:
+A cluster contains nodes (machines and environments physical or virtual)
+
+## Master Node:
+The master node has 4 processes installed:
+- api server: cluster gateway (client - server) and act as gatekeeper for authentication
+[ Request -> api server on master node (validates request) -> processes like schedule -> pods]
+- scheduler (distributes pods)
+- controller manager
+- etcd (Key value store) cluster brain. Knows available resources, cluster status...
+
+## Worker Node:
+A worker node is managed by a server node
+
+A worker node has 3 processes installed:
+- container runtime (docker)
+- scheduler (kubelet: node/container runtime interface)
+- kube proxy
+
+## Communication
+Nodes communicate via Services (like a loadballancer that catches requests and redirects between pods).
+
+## Pods:
+A node contains pods that run
+
+A pod can be one or several containers (App, DataBase)
+
+All containers in a pod have the same IP and network port
+
 # The project
 ## Part 1: K3s and Vagrant
 - Set up 2 virtual machines using Vagrant, with specific resource constraints.

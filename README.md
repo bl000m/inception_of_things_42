@@ -162,6 +162,19 @@ Each service exposes port 80 on the host and directs traffic to port 8080 on the
 - install K3D: `wget -q -O - https://raw.githubusercontent.com/rancher/k3d/main/install.sh | bash`
 - install kubectl:  `sudo snap install kubectl --classic`
 
+# Argo CD setup
+If NodePort Service:
+- Exposing ArgoCD Server: We should expose the ArgoCD server using a service of type NodePort. This means that the ArgoCD server is made accessible on a specific port on all the nodes within the Kubernetes cluster.
+
+- NodePort Service Type: A NodePort service type makes a service accessible externally by mapping a port on each node to the internal service port. For example, if the internal service port for ArgoCD is 443, and the NodePort assigned is 32000, then accessing any node's IP address on port 32000 will forward the request to the ArgoCD server.
+
+- No Port Forwarding Within the Cluster: Because the ArgoCD server is exposed using NodePort, there is no need for additional port forwarding within the cluster. Any node within the cluster can reach the ArgoCD server using the assigned NodePort.
+
+If Port forwarding: 
+- Local Development: During local development,  interact with services running inside the Kubernetes cluster from their local machine. Port forwarding allowsto create a connection between local machine and a specific port on a pod within the cluster.
+
+- Accessing Services Remotely: If the Kubernetes cluster is running on a cloud provider or on a remote server, and direct external access to a specific service is required, port forwarding can be used to create a secure connection.
+
 ## Testing
 Execute the script in this order:
 - `setting/install_dependencies.sh`
@@ -174,6 +187,8 @@ To check:
 - `k3d cluster get frank-cluster`
 - `k3d cluster list`
 - `kubectl cluster info`
+- `argocd app list dev`
+- `kubectl get svc argocd-server -n argocd`
 
 ## troubleshooting
 - `k3d cluster delete frank-cluster`

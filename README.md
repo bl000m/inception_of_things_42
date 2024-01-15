@@ -180,8 +180,8 @@ Execute the script in this order:
 - `setting/install_dependencies.sh`
 - `k3d/k3d_cluster_setup`
 - `argo_cd_conf.sh`
-=> the logs will tell us at which ip address to access Argo on browser
-To check:
+=> the logs will tell us which password to use on localhost:8080 to access Argo CD as `admin``
+Useful commands to check:
 - `docker ps`
 - `k3d node list`
 - `k3d cluster get frank-cluster`
@@ -189,6 +189,33 @@ To check:
 - `kubectl cluster info`
 - `argocd app list dev`
 - `kubectl get svc argocd-server -n argocd`
+What to test:
+- list the pod running in dev namespace: `kubectl get pods -n dev`
+- we should see the only pod running corresponding to the Wil app installed, copy its pod name
+- use the pod name to execute the command detailing the pod: `kubectl describe pod <pod_name> -n dev`
+- under Containers we should see something like:
+```
+  will:
+    Container ID:   containerd://6fea2b6647200fe3f63c9f982c05254029cd1ecc2093ba5abb4801df96b15d46
+    Image:          **wil42/playground:v1**
+    Image ID:       docker.io/wil42/playground@sha256:0f8be6f0f51fa7129719392fcf464170c432b2bdb539b5b7fd2db9b42f7b7f91
+    Port:           8888/TCP
+    Host Port:      0/TCP
+    State:          Running
+      Started:      Mon, 15 Jan 2024 15:35:31 +0100
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-ppntn (ro)
+
+```
+in the Image we have **v1**
+- update deployment.yaml in mpagani repo changing v1 to v2, commit and push
+- it takes some minute for the system to delete the pod corresponding to v1 and replace it with the pod corresponding to v2
+- to check it forward the port for Will app with this command : `kubectl port-forward svc/will-app-service -n dev 8888:8888`
+- this way we can access localhost:8888 on browser. When the switch of version has been done we should see `{"status":"ok", "message": "v2"}`
+- iw we rerun `kubectl get pods -n dev` and `kubectl describe pod <pod_name> -n dev` right after we should see now see **v2** in the Image section
 
 ## troubleshooting
 - `k3d cluster delete frank-cluster`

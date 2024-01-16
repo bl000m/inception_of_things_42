@@ -1,55 +1,45 @@
-#!/bin/bash
+# install helm
+curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | sudo bash
+sudo helm version
 
-# install git
-sudo apt install git
+export EMAIL="mathiapagani@gmail.com"
+export DOMAIN="gitlab.local"
+export KUBECONFIG=~/.kube/config
 
-# after installing k3d, create a gitlab namespace
-kubectl create namespace gitlab
+sudo kubectl create namespace gitlab
 
-# install helm - https://helm.sh/
-sudo snap install helm --classic
+helm repo add gitlab https://charts.gitlab.io/
+helm repo update
 
-# Check if port 8080 is in use
-if sudo lsof -i :8080; then
-    # Get the PID of the process using port 8080
-    PID=$(sudo lsof -t -i :8080)
+helm install gitlab gitlab/gitlab -n gitlab \
+    --set global.edition=ce \
+    --set global.hosts.domain=$DOMAIN \
+    --set global.hosts.https="false" \
+    --set global.ingress.configureCertmanager="false" \
+    --set certmanager-issuer.email=$EMAIL \
+    --set gitlab-runner.install="false" 
 
-    # Kill the process
-    echo "Terminating process with PID $PID using port 8080"
-    sudo kill -9 $PID
+sudo kubectl wait -n gitlab --for=condition=available deployment --all --timeout=5m
 
-    echo "Process terminated."
-fi
+# Retrieve GitLab root password
+GITLAB_PASSWORD=$(sudo kubectl get secret -n gitlab gitlab-gitlab-initial-root-password -o jsonpath='{.data.password}' | base64 -d)
 
-# check and add host
-HOST_ENTRY="127.0.0.1 gitlab.k3d.gitlab.com"
-HOSTS_FILE="/etc/hosts"
+echo -e "GITLAB_PASSWORD: \033[0;32m$GITLAB_PASSWORD\033[0m"
 
-if grep -q "$HOST_ENTRY" "$HOSTS_FILE"; then
-    echo "Host entry already exists in $HOSTS_FILE"
-else
-    echo "Adding host entry to $HOSTS_FILE"
-    echo "$HOST_ENTRY" | sudo tee -a "$HOSTS_FILE"
-fi
+cat <<EOF | sudo kubectl apply -f -
+apiVersion: v1
+kind: Service
+metadata:
+  name: gitlab-svc
+  namespace: gitlab
+spec:
+  type: LoadBalancer
+  selector:
+    app.kubernetes.io/name: gitlab-webservice-default
+  ports:
+  - port: 8085
+    protocol: TCP
+    targetPort: 8085
+EOF
 
-sudo helm repo add gitlab https://charts.gitlab.io/
-sudo helm repo update 
-sudo helm upgrade --install gitlab gitlab/gitlab \
-  -n gitlab \
-  -f https://gitlab.com/gitlab-org/charts/gitlab/raw/master/examples/values-minikube-minimum.yaml \
-  --set global.hosts.domain=k3d.gitlab.com \
-  --set global.hosts.externalIP=0.0.0.0 \
-  --set global.hosts.https=false \
-  --set global.hosts.kubernetesAgent.apiServer="https://0.0.0.0:40495" \
-  --timeout 600s
-
-# wait for the GitLab webservice pod to be ready
-sudo kubectl wait --for=condition=ready --timeout=1200s pod -l app=webservice -n gitlab
-
-# password to GitLab (user: root)
-echo -n "GITLAB PASSWORD: "
-sudo kubectl get secret gitlab-gitlab-initial-root-password -n gitlab -o jsonpath="{.data.password}" | base64 --decode
-echo
-
-# access GitLab using argocd localhost:80 or http://gitlab.k3d.gitlab.com
-sudo kubectl port-forward svc/gitlab-webservice-default -n gitlab 80:8181 2>&1 >/dev/null &
+sudo kubectl port-forward --address 0.0.0.0 svc/gitlab-webservice-default -n gitlab 8085:8181 

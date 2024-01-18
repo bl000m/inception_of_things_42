@@ -30,6 +30,9 @@ A pod can be one or several containers (App, DataBase)
 
 All containers in a pod have the same IP and network port
 
+<br><br>
+---
+<br><br>
 # The project
 ## Part 1: K3s and Vagrant
 - Set up 2 virtual machines using Vagrant, with specific resource constraints.

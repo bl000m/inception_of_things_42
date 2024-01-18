@@ -47,7 +47,7 @@ spec:
     targetPort: 8085
 EOF
 
-sudo kubectl port-forward --address 0.0.0.0 svc/gitlab-webservice-default -n gitlab 8086:8181 &
+sudo kubectl port-forward --address 0.0.0.0 svc/gitlab-webservice-default -n gitlab 8085:8181 &
 
 # Generate SSH key if not exists
 if [ ! -f ~/.ssh/id_rsa ]; then

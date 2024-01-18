@@ -221,7 +221,7 @@ Useful commands to check:
 - `k3d node list`
 - `k3d cluster get frank-cluster`
 - `k3d cluster list`
-- `kubectl cluster info`
+- `kubectl cluster-info`
 - `argocd app list dev`
 - `kubectl get svc argocd-server -n argocd`
 - `kubectl get namespaces`

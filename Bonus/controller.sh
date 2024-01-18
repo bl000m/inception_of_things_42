@@ -27,4 +27,4 @@ sudo iptables -L
 bash ./k3d_cluster_setup.sh
 bash ./gitlab_setup.sh
 bash ./argo_cd_conf.sh
-bash ./launching.sh
+# bash ./launching.sh

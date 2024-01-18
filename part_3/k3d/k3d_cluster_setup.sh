@@ -1,29 +1,29 @@
 #!/bin/bash
 
-# Variables
-CLUSTER_NAME="frank-cluster"
-ARGOCD_NAMESPACE="argocd"
-DEV_NAMESPACE="dev"
+# Install k3d if not installed
+curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
 
-# Function to wait for cluster nodes to be ready
-wait_for_nodes() {
-    echo "Waiting for cluster nodes to be ready..."
-    kubectl wait node --for=condition=Ready --all --timeout=300s
-}
+# Check if the Frank cluster already exists
+if k3d cluster get frank > /dev/null 2>&1; then
+    echo "Frank cluster already exists. Skipping creation."
+else
+    # Create Frank cluster
+    sudo k3d cluster create frank
+    mkdir -p ~/.kube
+    sudo k3d kubeconfig get frank > ~/.kube/config
 
-# Create K3d cluster
-echo "Creating K3d cluster: $CLUSTER_NAME"
-k3d cluster create $CLUSTER_NAME
+    sleep 60s
+    sudo kubectl -n kube-system delete pods --all --force
+    sudo kubectl -n kube-system wait --for=condition=Ready --timeout=5m pods --all
+    clear
+    sudo kubectl get pods -A
+    sleep 3s
 
-# Set KUBECONFIG to use the created cluster
-export KUBECONFIG="$(k3d kubeconfig write $CLUSTER_NAME)"
+    sudo kubectl create namespace dev
+    sudo kubectl create namespace argocd
+    clear
+    sudo kubectl get namespaces
+    sleep 3s
 
-# Wait for cluster nodes to be ready
-wait_for_nodes
-
-# Create development namespace
-echo "Creating development namespace: $DEV_NAMESPACE"
-kubectl create namespace $DEV_NAMESPACE
-
-
-echo "Hey Frank, your Cluster setup is completed!"
+    echo "Hey Frank, your Cluster setup is completed!"
+fi

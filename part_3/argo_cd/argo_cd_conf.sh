@@ -72,25 +72,26 @@ if sudo netstat -tulpn | grep -q :8080; then
 fi
 
 
-# start port forwarding
-echo "Starting port forwarding..."
-# Run port-forward in the background and hide the output
+# Check if another port-forwarding process is already in progress for argocd-server
+if sudo lsof -i :8080 -sTCP:LISTEN -t | grep -q 'kubectl'; then
+ echo "Another port-forwarding process for argocd-server is already in progress. Killing it..."
+ sudo pkill -f 'kubectl.*port-forward.*8080'
+ sleep 5
+fi
+
+# Start port forwarding for argocd-server
+echo "Starting port forwarding for argocd-server..."
 kubectl port-forward svc/argocd-server -n argocd 8080:443 &>/dev/null &
 sleep 10
-echo "Port forwarding started successfully. Below the detail of port forwarding:"
+echo "Port forwarding for argocd-server started successfully. Below the detail of port forwarding:"
 sudo netstat -tulpn | grep :8080
 
-# Check if another port-forwarding process is already in progress
-while sudo lsof -i :8080 -sTCP:LISTEN -t | grep -q 'kubectl'; do
-    echo "Waiting for existing port-forwarding process to complete..."
-    sleep 5
+# Wait for port-forwarding for argocd-server to be ready
+while ! curl -s http://localhost:8080 > /dev/null; do
+ echo "Waiting for port-forwarding for argocd-server to be ready..."
+ sleep 5
 done
 
-# Wait for port-forwarding to be ready
-while ! curl -s http://localhost:8080 > /dev/null; do
-    echo "Waiting for port-forwarding to be ready..."
-    sleep 5
-done
 
 # Log in to ArgoCD using admin credentials
 ARGOCD_PASSWORD=$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)
@@ -154,3 +155,23 @@ while true; do
 done
 
 argocd app get will --grpc-web
+
+# Check if another port-forwarding process is already in progress for will-app-service
+if sudo lsof -i :8888 -sTCP:LISTEN -t | grep -q 'kubectl'; then
+ echo "Another port-forwarding process for will-app-service is already in progress. Killing it..."
+ sudo pkill -f 'kubectl.*port-forward.*8888'
+ sleep 5
+fi
+
+# Start port forwarding for will-app-service
+echo "Starting port forwarding for will-app-service..."
+kubectl port-forward svc/will-app-service -n dev 8888:8888 &>/dev/null &
+sleep 10
+echo "Port forwarding for will-app-service started successfully. Below the detail of port forwarding:"
+sudo netstat -tulpn | grep :8888
+
+# Wait for port-forwarding for will-app-service to be ready
+while ! curl -s http://localhost:8888 > /dev/null; do
+ echo "Waiting for port-forwarding for will-app-service to be ready..."
+ sleep 5
+done

@@ -249,9 +249,8 @@ What to test:
 in the Image we have **v1**
 - update deployment.yaml in mpagani repo changing v1 to v2, commit and push
 - it takes some minute for the system to delete the pod corresponding to v1 and replace it with the pod corresponding to v2
-- to check it forward the port for Will app with this command : `kubectl port-forward svc/will-app-service -n dev 8888:8888`
+- to check it, port forward again: `kubectl port-forward svc/will-app-service -n dev 8888:8888` and then this command : `curl http://localhost:8888`
 - this way we can access localhost:8888 on browser. When the switch of version has been done we should see `{"status":"ok", "message": "v2"}`
-- or in an easier way: `curl http://localhost:8888`
 - iw we rerun `kubectl get pods -n dev` and `kubectl describe pod <pod_name> -n dev` right after we should see now see **v2** in the Image section
 
 ## troubleshooting

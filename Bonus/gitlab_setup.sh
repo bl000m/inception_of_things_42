@@ -2,9 +2,14 @@
 curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | sudo bash
 sudo helm version
 
-export EMAIL="mathiapagani@gmail.com"
 export DOMAIN="gitlab.local"
 export KUBECONFIG=~/.kube/config
+
+# Check if entry already exists in /etc/hosts
+if ! grep -q "0.0.0.0 gitlab.local" /etc/hosts; then
+    # Add entry to /etc/hosts
+    sudo bash -c 'echo "0.0.0.0 gitlab.local" >> /etc/hosts'
+fi
 
 sudo kubectl create namespace gitlab
 
@@ -42,4 +47,23 @@ spec:
     targetPort: 8085
 EOF
 
-sudo kubectl port-forward --address 0.0.0.0 svc/gitlab-webservice-default -n gitlab 8085:8181 
+sudo kubectl port-forward --address 0.0.0.0 svc/gitlab-webservice-default -n gitlab 8085:8181 &
+
+# Generate SSH key if not exists
+if [ ! -f ~/.ssh/id_rsa ]; then
+    ssh-keygen -t rsa -b 4096 -C "mathiapagani@gmail.com" -f ~/.ssh/id_rsa
+    chmod 600 ~/.ssh/id_rsa
+fi
+
+# Add SSH key to SSH agent
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_rsa
+
+# Configure Git to use SSH
+git config --global core.sshCommand "ssh -i ~/.ssh/id_rsa -F /dev/null"
+
+# Wait for the port-forwarding process to complete before attempting to clone
+wait
+
+# Clone the GitLab repository using SSH with the correct port
+git clone git@gitlab.local:8086:root/mpagani.git

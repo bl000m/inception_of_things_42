@@ -270,3 +270,12 @@ This is separate from the GitLab service hosted at gitlab.com.
 - Installation of GitLab Helm Chart: Helm is a package manager for Kubernetes applications. we use the GitLab Helm chart to define and install the necessary components for GitLab. The Helm chart provides a set of predefined configurations and resources needed to run GitLab in a Kubernetes environment.
 - These settings include the domain, external IP, whether to use HTTPS, and a timeout duration for the deployment.
 - Port forwarding: set up port forwarding to allow access to GitLab. by forwarding traffic from the local machine's port 80 to the GitLab service in the Kubernetes cluster.
+
+## For testing
+- run in this order: 
+ - /scripts/gitlab_setup.sh => it takes around 10 min
+ - navigate to gitlab.k3d.gitlab.com. log in with user = root and psw = the one console logged in the shell (green)
+ - create the project "mpagani", public. the name is important
+ - run /scripts/repo_config.sh and verify that on gitlab the app dir with manifests has been copied from github repo
+ - run /scripts/argo_cd_conf.sh and check on localhost port 8085 if app is created and healthy
+ - update gitlab manifest image version and push. wait a few minutes and check  as in part 3

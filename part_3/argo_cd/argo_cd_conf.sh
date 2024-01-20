@@ -22,6 +22,9 @@ fi
 
 echo "[INFO] Installing ArgoCD in the argocd namespace on server node (ip: $SERVER_IP)"
 
+# Create namespace
+kubectl create namespace argocd
+
 # Install ArgoCD in the specified namespace
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 

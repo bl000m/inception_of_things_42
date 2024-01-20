@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Install k3d if not installed
+curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
+
 # Check if the Frank cluster already exists
 if k3d cluster get frank > /dev/null 2>&1; then
     echo "Frank cluster already exists. Skipping creation."
